@@ -31,7 +31,7 @@ var admin = _firebaseAdmin["default"].initializeApp({
     type: type_cert,
     project_id: project_id_cert,
     private_key_id: private_key_id_cert,
-    private_key: private_key_cert,
+    private_key: private_key_cert.replace(/\\n/g, "\n"),
     client_email: client_email_cert,
     client_id: client_id_cert,
     auth_uri: auth_uri_cert,
