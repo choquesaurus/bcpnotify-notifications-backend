@@ -16,6 +16,8 @@ var _expressSession2 = _interopRequireDefault(require("express-session"));
 
 var _passport = _interopRequireDefault(require("passport"));
 
+var _mail = _interopRequireDefault(require("@sendgrid/mail"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -30,6 +32,8 @@ if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 } //import "@babel/polyfill";
 
+
+_mail["default"].setApiKey(process.env.SENDGRID_API_KEY);
 
 var Aplication = /*#__PURE__*/function () {
   function Aplication() {

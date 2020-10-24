@@ -20,6 +20,8 @@ var _mail = _interopRequireDefault(require("@sendgrid/mail"));
 
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
+var _index2 = require("../../../datalayer/backing/sendgrid/index");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -107,7 +109,7 @@ var validate_create_new_user = /*#__PURE__*/function () {
             validateParams(rest); //Validar si existe  o no
 
             if (!(searchuser === null)) {
-              _context.next = 25;
+              _context.next = 24;
               break;
             }
 
@@ -147,16 +149,14 @@ var validate_create_new_user = /*#__PURE__*/function () {
           case 18:
             _yield$IngestUserToFi = _context.sent;
             FillToFirebaseUser = _yield$IngestUserToFi.FillToFirebaseUser;
-
             // AGREGAR API KEY => SEND GRID MAIL
-            _mail["default"].setApiKey(process.env.SENDGRID_API_KEY); //OBTENER LINK DE LA APLICACION BASE
-
-
+            //sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+            //OBTENER LINK DE LA APLICACION BASE
             urlbase = "".concat(req.protocol, "://").concat(req.headers.host);
-            _context.next = 24;
+            _context.next = 23;
             return VerifyAccountEmailAddress(rest.email, cryptoTokenValidateUser, urlbase);
 
-          case 24:
+          case 23:
             return _context.abrupt("return", res.send({
               //message: `El numero de cuenta ${nrocuenta} se creo correctamente`,
               message: "Se envio un link de activacion  a tu correo ".concat(rest.email),
@@ -170,24 +170,24 @@ var validate_create_new_user = /*#__PURE__*/function () {
               FillToFirebaseUser: FillToFirebaseUser
             }));
 
-          case 25:
+          case 24:
             if (!("email" in searchuser && searchuser !== null)) {
-              _context.next = 27;
+              _context.next = 26;
               break;
             }
 
             throw Error("El correo ".concat(rest.email, " ya esta asociado u creado"));
 
-          case 27:
+          case 26:
             // const users = await ModelUser.findAll();
             res.send({
               message: "default"
             });
-            _context.next = 33;
+            _context.next = 32;
             break;
 
-          case 30:
-            _context.prev = 30;
+          case 29:
+            _context.prev = 29;
             _context.t0 = _context["catch"](0);
             return _context.abrupt("return", res.send({
               message: _context.t0.message,
@@ -196,12 +196,12 @@ var validate_create_new_user = /*#__PURE__*/function () {
               FillToFirebaseUser: false
             }));
 
-          case 33:
+          case 32:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 30]]);
+    }, _callee, null, [[0, 29]]);
   }));
 
   return function validate_create_new_user(_x4, _x5) {
@@ -229,11 +229,11 @@ var VerifyAccountEmailAddress = /*#__PURE__*/function () {
             msg = {
               to: email,
               // Change to your recipient
-              from: "bcpnotify@choquesaurus.com",
-              // Change to your verified sender
-              subject: "BCP Notify",
+              from: "Activacion BCP <".concat(process.env.EMAIL_BCPNOTIFY_SENDGRID_SENDER_ACTIVATION, ">"),
+              //from: "bcpnotify@choquesaurus.com", // Change to your verified sender
+              subject: "Necesitas activar tu cuenta",
               //text: msj,
-              html: "<div>\n    <p> Para activar tu cuenta en bcp notify , da click en este enlace : </p>\n    <a href='".concat(urlbase, "/verifytoken?token=").concat(cryptoToken, "' target='_blank'>Activar cuenta</a></div>")
+              html: (0, _index2.TemplateHTMLActiveLinkEmail)(urlbase, cryptoToken)
             };
             _context2.prev = 1;
             _context2.next = 4;

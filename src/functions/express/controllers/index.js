@@ -8,7 +8,7 @@ import { database } from "../../../datalayer/backing/firebase/index";
 import crypto from "crypto";
 import sgMail from "@sendgrid/mail";
 import jwt from "jsonwebtoken";
-
+import { TemplateHTMLActiveLinkEmail } from "../../../datalayer/backing/sendgrid/index";
 export async function isVerified(req, res, next) {
   // if (!(results.docs[0] && "details_user" in results.docs[0].data())) {
   //   throw new Error("No existe el ususarios");
@@ -90,7 +90,7 @@ export const validate_create_new_user = async (req, res) => {
       });
 
       // AGREGAR API KEY => SEND GRID MAIL
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      //sgMail.setApiKey(process.env.SENDGRID_API_KEY);
       //OBTENER LINK DE LA APLICACION BASE
       const urlbase = `${req.protocol}://${req.headers.host}`;
       await VerifyAccountEmailAddress(
@@ -136,12 +136,11 @@ const validateParams = ({ nrocuenta }) => {
 const VerifyAccountEmailAddress = async (email, cryptoToken, urlbase) => {
   const msg = {
     to: email, // Change to your recipient
-    from: "bcpnotify@choquesaurus.com", // Change to your verified sender
-    subject: "BCP Notify",
+    from: `Activacion BCP <${process.env.EMAIL_BCPNOTIFY_SENDGRID_SENDER_ACTIVATION}>`,
+    //from: "bcpnotify@choquesaurus.com", // Change to your verified sender
+    subject: "Necesitas activar tu cuenta",
     //text: msj,
-    html: `<div>
-    <p> Para activar tu cuenta en bcp notify , da click en este enlace : </p>
-    <a href='${urlbase}/verifytoken?token=${cryptoToken}' target='_blank'>Activar cuenta</a></div>`,
+    html: TemplateHTMLActiveLinkEmail(urlbase, cryptoToken),
   };
   try {
     await sgMail.send(msg);
