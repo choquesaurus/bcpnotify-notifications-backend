@@ -13,8 +13,8 @@ import cookieParser from "cookie-parser";
 import expressSession from "express-session";
 import passport from "passport";
 
-import sgMail from "@sendgrid/mail";
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+//import sgMail from "@sendgrid/mail";
+
 class Aplication {
   constructor() {
     this.app = express();
@@ -62,8 +62,8 @@ class Aplication {
     this.app.use("/", routes);
   }
   start() {
-    this.app.listen(process.env.PORT || 5014, () => {
-      console.log(`Run server inN localhost:5014`);
+    this.app.listen(process.env.PORT || 5015, () => {
+      console.log(`Run server in localhost:5015`);
     });
   }
 }

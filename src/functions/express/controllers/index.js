@@ -90,7 +90,7 @@ export const validate_create_new_user = async (req, res) => {
       });
 
       // AGREGAR API KEY => SEND GRID MAIL
-      //sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
       //OBTENER LINK DE LA APLICACION BASE
       const urlbase = `${req.protocol}://${req.headers.host}`;
       await VerifyAccountEmailAddress(
