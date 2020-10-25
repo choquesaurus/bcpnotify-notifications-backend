@@ -11,26 +11,6 @@ import { TemplateHTMLActiveLinkEmail } from "../../../datalayer/backing/sendgrid
 import sgMail from "@sendgrid/mail";
 const routes = Router();
 
-// routes.post("/sendemailprueba", async (req, res) => {
-//   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-//   const msg = {
-//     to: "daniechoque159@gmail.com", // Change to your recipient
-//     from: `Activacion BCP <${process.env.EMAIL_BCPNOTIFY_SENDGRID_SENDER_ACTIVATION}>`,
-//     //from: "bcpnotify@choquesaurus.com", // Change to your verified sender
-//     subject: "Necesitas activar tu cuenta",
-//     //text: msj,
-//     html: TemplateHTMLActiveLinkEmail(
-//       "choquesaurus.com",
-//       "aosjdiojqwiojeiowqje"
-//     ),
-//   };
-//   try {
-//     await sgMail.send(msg);
-//     return res.send({ message: "email enviado" });
-//   } catch (error) {
-//     return res.send({ message: error.message });
-//   }
-// });
 routes.get("/", async (req, res) => {
   // if (!(results.docs[0] && "details_user" in results.docs[0].data())) {
   //   throw new Error("No existe el ususarios");
@@ -177,63 +157,6 @@ routes.post("/transferdetails", async (req, res) => {
   res.send({ data: data_result.data() });
 });
 routes.post("/signup", validate_create_new_user);
-
-// routes.post("/signup2", async (req, res) => {
-//   const {
-//     nrocuenta,
-//     password, //bcrypt
-//     photoURL = "https://cdn3.f-cdn.com/contestentries/1269942/15600440/5a991c82be987_thumb900.jpg",
-//     email,
-//     name,
-//     address,
-//     age,
-//   } = req.body;
-//   database
-//     .collection("users")
-//     .add({
-//       created: true,
-//       //uid: user.uid,
-//       details_create: {
-//         creationTime: new Date().toDateString(), //metadata.creationTime
-//         device: "",
-//       },
-//       details_user: { console.log(token)
-//         name,
-//         address,
-//         photoURL,
-//         //displayName: user.displayName,
-//         email,
-//         nrocuenta,
-//         age,
-//       },
-//       token: "",
-//       //tokens: [],
-//     })
-//     .then(async (refUser) => {
-//       try {
-//         await refUser.collection("credentialsbcp").add({
-//           nrocuenta,
-//           password,
-//         });
-//         await refUser.collection("accountbcp").doc(nrocuenta).set({
-//           saldo: 500.0,
-//           incoming_transfer: [], //transferencias entrantes
-//           outgoing_transfer: [], //transferencias salientes
-//         });
-//         return res.send({ message: "Se creo correctamente el usuario" });
-//       } catch (error) {
-//         return res.send({ message: error.message });
-//       }
-
-//       // .then((result) =>
-//       //   res.send({ message: "Se creo correctamente el usuario" })
-//       // )
-//       // .catch((error) => res.send({ message: error.message }));
-//     })
-//     .catch((error) => res.send({ message: error.message }));
-
-//   //return res.send({ message: "Hello :)" });
-// });
 
 routes.post("/transfer", async (req, res) => {
   const {
@@ -393,4 +316,82 @@ routes.post("/transfer", async (req, res) => {
   //   return res.send({ message: error.message });
   // }
 });
+
+// routes.post("/sendemailprueba", async (req, res) => {
+//   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+//   const msg = {
+//     to: "daniechoque159@gmail.com", // Change to your recipient
+//     from: `Activacion BCP <${process.env.EMAIL_BCPNOTIFY_SENDGRID_SENDER_ACTIVATION}>`,
+//     //from: "bcpnotify@choquesaurus.com", // Change to your verified sender
+//     subject: "Necesitas activar tu cuenta",
+//     //text: msj,
+//     html: TemplateHTMLActiveLinkEmail(
+//       "choquesaurus.com",
+//       "aosjdiojqwiojeiowqje"
+//     ),
+//   };
+//   try {
+//     await sgMail.send(msg);
+//     return res.send({ message: "email enviado" });
+//   } catch (error) {
+//     return res.send({ message: error.message });
+//   }
+// });
+
+// routes.post("/signup2", async (req, res) => {
+//   const {
+//     nrocuenta,
+//     password, //bcrypt
+//     photoURL = "https://cdn3.f-cdn.com/contestentries/1269942/15600440/5a991c82be987_thumb900.jpg",
+//     email,
+//     name,
+//     address,
+//     age,
+//   } = req.body;
+//   database
+//     .collection("users")
+//     .add({
+//       created: true,
+//       //uid: user.uid,
+//       details_create: {
+//         creationTime: new Date().toDateString(), //metadata.creationTime
+//         device: "",
+//       },
+//       details_user: { console.log(token)
+//         name,
+//         address,
+//         photoURL,
+//         //displayName: user.displayName,
+//         email,
+//         nrocuenta,
+//         age,
+//       },
+//       token: "",
+//       //tokens: [],
+//     })
+//     .then(async (refUser) => {
+//       try {
+//         await refUser.collection("credentialsbcp").add({
+//           nrocuenta,
+//           password,
+//         });
+//         await refUser.collection("accountbcp").doc(nrocuenta).set({
+//           saldo: 500.0,
+//           incoming_transfer: [], //transferencias entrantes
+//           outgoing_transfer: [], //transferencias salientes
+//         });
+//         return res.send({ message: "Se creo correctamente el usuario" });
+//       } catch (error) {
+//         return res.send({ message: error.message });
+//       }
+
+//       // .then((result) =>
+//       //   res.send({ message: "Se creo correctamente el usuario" })
+//       // )
+//       // .catch((error) => res.send({ message: error.message }));
+//     })
+//     .catch((error) => res.send({ message: error.message }));
+
+//   //return res.send({ message: "Hello :)" });
+// });
 export default routes;
