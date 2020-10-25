@@ -141,9 +141,9 @@ const VerifyAccountEmailAddress = async (email, cryptoToken, urlbase) => {
     from: `Activacion BCP <${process.env.EMAIL_BCPNOTIFY_SENDGRID_SENDER_ACTIVATION}>`,
     //from: "bcpnotify@choquesaurus.com", // Change to your verified sender
     subject: "Necesitas activar tu cuenta",
-    //text: msj,
+    text: "HOLA QUE TAL ",
     //html: TemplateHTMLActiveLinkEmail(urlbase, cryptoToken),
-    html: "<a href='https://choquesaurus.com' target='_blank'>activar link</a>",
+    //html: "<a href='https://choquesaurus.com' target='_blank'>activar link</a>",
   };
   try {
     await sgMail.send(msg);
