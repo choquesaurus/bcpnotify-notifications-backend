@@ -5,10 +5,11 @@ import ModelUser from "../models/users";
 import bcrypt from "bcryptjs";
 import uid from "uid";
 import { database } from "../../../datalayer/backing/firebase/index";
-import crypto from "crypto";
+//import crypto from "crypto";
 import sgMail from "@sendgrid/mail";
 import jwt from "jsonwebtoken";
 import { TemplateHTMLActiveLinkEmail } from "../../../datalayer/backing/sendgrid/index";
+
 export async function isVerified(req, res, next) {
   // if (!(results.docs[0] && "details_user" in results.docs[0].data())) {
   //   throw new Error("No existe el ususarios");
@@ -139,8 +140,8 @@ const VerifyAccountEmailAddress = async (email, cryptoToken, urlbase) => {
     from: `Activacion BCP <${process.env.EMAIL_BCPNOTIFY_SENDGRID_SENDER_ACTIVATION}>`,
     //from: "bcpnotify@choquesaurus.com", // Change to your verified sender
     subject: "Necesitas activar tu cuenta",
-    //text: msj,
-    html: TemplateHTMLActiveLinkEmail(urlbase, cryptoToken),
+    html: TemplateHTMLActiveLinkEmail(cryptoToken, urlbase),
+    //html: "<a href='https://choquesaurus.com' target='_blank'>activar link</a>",
   };
   try {
     await sgMail.send(msg);
