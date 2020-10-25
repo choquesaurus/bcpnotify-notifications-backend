@@ -16,8 +16,6 @@ var _expressSession2 = _interopRequireDefault(require("express-session"));
 
 var _passport = _interopRequireDefault(require("passport"));
 
-var _mail = _interopRequireDefault(require("@sendgrid/mail"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -33,8 +31,7 @@ if (process.env.NODE_ENV != "production") {
 } //import "@babel/polyfill";
 
 
-_mail["default"].setApiKey(process.env.SENDGRID_API_KEY);
-
+//import sgMail from "@sendgrid/mail";
 var Aplication = /*#__PURE__*/function () {
   function Aplication() {
     _classCallCheck(this, Aplication);
@@ -90,8 +87,8 @@ var Aplication = /*#__PURE__*/function () {
   }, {
     key: "start",
     value: function start() {
-      this.app.listen(process.env.PORT || 5014, function () {
-        console.log("Run server inN localhost:5014");
+      this.app.listen(process.env.PORT || 5015, function () {
+        console.log("Run server in localhost:5015");
       });
     }
   }]);
