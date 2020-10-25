@@ -12,13 +12,13 @@ var _setupPassport = _interopRequireDefault(require("./passport/setupPassport"))
 
 var _cookieParser = _interopRequireDefault(require("cookie-parser"));
 
-var _expressSession2 = _interopRequireDefault(require("express-session"));
+var _cookieSession = _interopRequireDefault(require("cookie-session"));
 
 var _passport = _interopRequireDefault(require("passport"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+var _mail = _interopRequireDefault(require("@sendgrid/mail"));
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -31,7 +31,8 @@ if (process.env.NODE_ENV != "production") {
 } //import "@babel/polyfill";
 
 
-//import sgMail from "@sendgrid/mail";
+_mail["default"].setApiKey(process.env.SENDGRID_API_KEY);
+
 var Aplication = /*#__PURE__*/function () {
   function Aplication() {
     _classCallCheck(this, Aplication);
@@ -49,25 +50,23 @@ var Aplication = /*#__PURE__*/function () {
         extended: true
       })); //this.app.use(morgan("dev"));
 
-      this.app.use((0, _cookieParser["default"])(process.env.keyCookie));
-      this.app.use((0, _expressSession2["default"])(_defineProperty({
-        secret: process.env.keyCookie,
-        cookie: {
-          maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
-
-        },
-        //store: store,
-        resave: false,
-        saveUninitialized: false
-      }, "cookie", {
-        secure: false
-      }))); // this.app.use(
-      //   cookieSession({
-      //     name: "session",
-      //     keys: [process.env.keyCookie],
+      this.app.use((0, _cookieParser["default"])(process.env.keyCookie)); // this.app.use(
+      //   expressSession({
+      //     secret: process.env.keyCookie,
+      //     cookie: {
+      //       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      //     },
+      //     //store: store,
+      //     resave: false,
+      //     saveUninitialized: false,
+      //     cookie: { secure: false }, // Remember to set this
       //   })
       // );
 
+      this.app.use((0, _cookieSession["default"])({
+        name: "session",
+        keys: [process.env.keyCookie]
+      }));
       this.app.use(_passport["default"].initialize());
       this.app.use(_passport["default"].session());
       this.app.use((0, _cors["default"])({

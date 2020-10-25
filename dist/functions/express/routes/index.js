@@ -17,6 +17,10 @@ var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
 var _index2 = require("../controllers/index");
 
+var _index3 = require("../../../datalayer/backing/sendgrid/index");
+
+var _mail = _interopRequireDefault(require("@sendgrid/mail"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -27,7 +31,27 @@ if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 }
 
-var routes = (0, _express.Router)();
+var routes = (0, _express.Router)(); // routes.post("/sendemailprueba", async (req, res) => {
+//   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+//   const msg = {
+//     to: "daniechoque159@gmail.com", // Change to your recipient
+//     from: `Activacion BCP <${process.env.EMAIL_BCPNOTIFY_SENDGRID_SENDER_ACTIVATION}>`,
+//     //from: "bcpnotify@choquesaurus.com", // Change to your verified sender
+//     subject: "Necesitas activar tu cuenta",
+//     //text: msj,
+//     html: TemplateHTMLActiveLinkEmail(
+//       "choquesaurus.com",
+//       "aosjdiojqwiojeiowqje"
+//     ),
+//   };
+//   try {
+//     await sgMail.send(msg);
+//     return res.send({ message: "email enviado" });
+//   } catch (error) {
+//     return res.send({ message: error.message });
+//   }
+// });
+
 routes.get("/", /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
     return regeneratorRuntime.wrap(function _callee$(_context) {
