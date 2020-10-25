@@ -5,7 +5,7 @@ import ModelUser from "../models/users";
 import bcrypt from "bcryptjs";
 import uid from "uid";
 import { database } from "../../../datalayer/backing/firebase/index";
-import crypto from "crypto";
+//import crypto from "crypto";
 import sgMail from "@sendgrid/mail";
 import jwt from "jsonwebtoken";
 import { TemplateHTMLActiveLinkEmail } from "../../../datalayer/backing/sendgrid/index";
@@ -135,14 +135,12 @@ const validateParams = ({ nrocuenta }) => {
 };
 
 const VerifyAccountEmailAddress = async (email, cryptoToken, urlbase) => {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const msg = {
     to: email, // Change to your recipient
     from: `Activacion BCP <${process.env.EMAIL_BCPNOTIFY_SENDGRID_SENDER_ACTIVATION}>`,
     //from: "bcpnotify@choquesaurus.com", // Change to your verified sender
     subject: "Necesitas activar tu cuenta",
-    text: "HOLA QUE TAL ",
-    //html: TemplateHTMLActiveLinkEmail(urlbase, cryptoToken),
+    html: TemplateHTMLActiveLinkEmail(cryptoToken, urlbase),
     //html: "<a href='https://choquesaurus.com' target='_blank'>activar link</a>",
   };
   try {
