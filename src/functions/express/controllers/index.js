@@ -93,11 +93,11 @@ export const validate_create_new_user = async (req, res) => {
       // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
       //OBTENER LINK DE LA APLICACION BASE
       const urlbase = `${req.protocol}://${req.headers.host}`;
-      await VerifyAccountEmailAddress(
-        rest.email,
-        cryptoTokenValidateUser,
-        urlbase
-      );
+      // await VerifyAccountEmailAddress(
+      //   rest.email,
+      //   cryptoTokenValidateUser,
+      //   urlbase
+      // );
       return res.send({
         //message: `El numero de cuenta ${nrocuenta} se creo correctamente`,
         message: `Se envio un link de activacion  a tu correo ${rest.email}`,

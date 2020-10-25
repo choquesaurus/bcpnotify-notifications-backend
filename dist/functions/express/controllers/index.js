@@ -109,7 +109,7 @@ var validate_create_new_user = /*#__PURE__*/function () {
             validateParams(rest); //Validar si existe  o no
 
             if (!(searchuser === null)) {
-              _context.next = 24;
+              _context.next = 22;
               break;
             }
 
@@ -152,11 +152,12 @@ var validate_create_new_user = /*#__PURE__*/function () {
             // AGREGAR API KEY => SEND GRID MAIL
             // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
             //OBTENER LINK DE LA APLICACION BASE
-            urlbase = "".concat(req.protocol, "://").concat(req.headers.host);
-            _context.next = 23;
-            return VerifyAccountEmailAddress(rest.email, cryptoTokenValidateUser, urlbase);
+            urlbase = "".concat(req.protocol, "://").concat(req.headers.host); // await VerifyAccountEmailAddress(
+            //   rest.email,
+            //   cryptoTokenValidateUser,
+            //   urlbase
+            // );
 
-          case 23:
             return _context.abrupt("return", res.send({
               //message: `El numero de cuenta ${nrocuenta} se creo correctamente`,
               message: "Se envio un link de activacion  a tu correo ".concat(rest.email),
@@ -170,24 +171,24 @@ var validate_create_new_user = /*#__PURE__*/function () {
               FillToFirebaseUser: FillToFirebaseUser
             }));
 
-          case 24:
+          case 22:
             if (!("email" in searchuser && searchuser !== null)) {
-              _context.next = 26;
+              _context.next = 24;
               break;
             }
 
             throw Error("El correo ".concat(rest.email, " ya esta asociado u creado"));
 
-          case 26:
+          case 24:
             // const users = await ModelUser.findAll();
             res.send({
               message: "default"
             });
-            _context.next = 32;
+            _context.next = 30;
             break;
 
-          case 29:
-            _context.prev = 29;
+          case 27:
+            _context.prev = 27;
             _context.t0 = _context["catch"](0);
             return _context.abrupt("return", res.send({
               message: _context.t0.message,
@@ -196,12 +197,12 @@ var validate_create_new_user = /*#__PURE__*/function () {
               FillToFirebaseUser: false
             }));
 
-          case 32:
+          case 30:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 29]]);
+    }, _callee, null, [[0, 27]]);
   }));
 
   return function validate_create_new_user(_x4, _x5) {
