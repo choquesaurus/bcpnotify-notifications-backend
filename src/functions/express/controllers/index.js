@@ -9,6 +9,7 @@ import crypto from "crypto";
 import sgMail from "@sendgrid/mail";
 import jwt from "jsonwebtoken";
 import { TemplateHTMLActiveLinkEmail } from "../../../datalayer/backing/sendgrid/index";
+
 export async function isVerified(req, res, next) {
   // if (!(results.docs[0] && "details_user" in results.docs[0].data())) {
   //   throw new Error("No existe el ususarios");
@@ -93,11 +94,11 @@ export const validate_create_new_user = async (req, res) => {
       // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
       //OBTENER LINK DE LA APLICACION BASE
       const urlbase = `${req.protocol}://${req.headers.host}`;
-      // await VerifyAccountEmailAddress(
-      //   rest.email,
-      //   cryptoTokenValidateUser,
-      //   urlbase
-      // );
+      await VerifyAccountEmailAddress(
+        rest.email,
+        cryptoTokenValidateUser,
+        urlbase
+      );
       return res.send({
         //message: `El numero de cuenta ${nrocuenta} se creo correctamente`,
         message: `Se envio un link de activacion  a tu correo ${rest.email}`,
@@ -134,13 +135,15 @@ const validateParams = ({ nrocuenta }) => {
 };
 
 const VerifyAccountEmailAddress = async (email, cryptoToken, urlbase) => {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const msg = {
     to: email, // Change to your recipient
     from: `Activacion BCP <${process.env.EMAIL_BCPNOTIFY_SENDGRID_SENDER_ACTIVATION}>`,
     //from: "bcpnotify@choquesaurus.com", // Change to your verified sender
     subject: "Necesitas activar tu cuenta",
     //text: msj,
-    html: TemplateHTMLActiveLinkEmail(urlbase, cryptoToken),
+    //html: TemplateHTMLActiveLinkEmail(urlbase, cryptoToken),
+    html: "<a href='https://choquesaurus.com' target='_blank'>activar link</a>",
   };
   try {
     await sgMail.send(msg);

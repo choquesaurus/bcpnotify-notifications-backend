@@ -16,8 +16,6 @@ var _cookieSession = _interopRequireDefault(require("cookie-session"));
 
 var _passport = _interopRequireDefault(require("passport"));
 
-var _mail = _interopRequireDefault(require("@sendgrid/mail"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -31,8 +29,8 @@ if (process.env.NODE_ENV != "production") {
 } //import "@babel/polyfill";
 
 
-_mail["default"].setApiKey(process.env.SENDGRID_API_KEY);
-
+//import sgMail from "@sendgrid/mail";
+//sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 var Aplication = /*#__PURE__*/function () {
   function Aplication() {
     _classCallCheck(this, Aplication);

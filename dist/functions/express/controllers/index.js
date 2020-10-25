@@ -109,7 +109,7 @@ var validate_create_new_user = /*#__PURE__*/function () {
             validateParams(rest); //Validar si existe  o no
 
             if (!(searchuser === null)) {
-              _context.next = 22;
+              _context.next = 24;
               break;
             }
 
@@ -152,12 +152,11 @@ var validate_create_new_user = /*#__PURE__*/function () {
             // AGREGAR API KEY => SEND GRID MAIL
             // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
             //OBTENER LINK DE LA APLICACION BASE
-            urlbase = "".concat(req.protocol, "://").concat(req.headers.host); // await VerifyAccountEmailAddress(
-            //   rest.email,
-            //   cryptoTokenValidateUser,
-            //   urlbase
-            // );
+            urlbase = "".concat(req.protocol, "://").concat(req.headers.host);
+            _context.next = 23;
+            return VerifyAccountEmailAddress(rest.email, cryptoTokenValidateUser, urlbase);
 
+          case 23:
             return _context.abrupt("return", res.send({
               //message: `El numero de cuenta ${nrocuenta} se creo correctamente`,
               message: "Se envio un link de activacion  a tu correo ".concat(rest.email),
@@ -171,24 +170,24 @@ var validate_create_new_user = /*#__PURE__*/function () {
               FillToFirebaseUser: FillToFirebaseUser
             }));
 
-          case 22:
+          case 24:
             if (!("email" in searchuser && searchuser !== null)) {
-              _context.next = 24;
+              _context.next = 26;
               break;
             }
 
             throw Error("El correo ".concat(rest.email, " ya esta asociado u creado"));
 
-          case 24:
+          case 26:
             // const users = await ModelUser.findAll();
             res.send({
               message: "default"
             });
-            _context.next = 30;
+            _context.next = 32;
             break;
 
-          case 27:
-            _context.prev = 27;
+          case 29:
+            _context.prev = 29;
             _context.t0 = _context["catch"](0);
             return _context.abrupt("return", res.send({
               message: _context.t0.message,
@@ -197,12 +196,12 @@ var validate_create_new_user = /*#__PURE__*/function () {
               FillToFirebaseUser: false
             }));
 
-          case 30:
+          case 32:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 27]]);
+    }, _callee, null, [[0, 29]]);
   }));
 
   return function validate_create_new_user(_x4, _x5) {
@@ -227,6 +226,8 @@ var VerifyAccountEmailAddress = /*#__PURE__*/function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            _mail["default"].setApiKey(process.env.SENDGRID_API_KEY);
+
             msg = {
               to: email,
               // Change to your recipient
@@ -234,27 +235,28 @@ var VerifyAccountEmailAddress = /*#__PURE__*/function () {
               //from: "bcpnotify@choquesaurus.com", // Change to your verified sender
               subject: "Necesitas activar tu cuenta",
               //text: msj,
-              html: (0, _index2.TemplateHTMLActiveLinkEmail)(urlbase, cryptoToken)
+              //html: TemplateHTMLActiveLinkEmail(urlbase, cryptoToken),
+              html: "<a href='https://choquesaurus.com' target='_blank'>activar link</a>"
             };
-            _context2.prev = 1;
-            _context2.next = 4;
+            _context2.prev = 2;
+            _context2.next = 5;
             return _mail["default"].send(msg);
 
-          case 4:
-            _context2.next = 9;
+          case 5:
+            _context2.next = 10;
             break;
 
-          case 6:
-            _context2.prev = 6;
-            _context2.t0 = _context2["catch"](1);
+          case 7:
+            _context2.prev = 7;
+            _context2.t0 = _context2["catch"](2);
             throw _context2.t0;
 
-          case 9:
+          case 10:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[1, 6]]);
+    }, _callee2, null, [[2, 7]]);
   }));
 
   return function VerifyAccountEmailAddress(_x6, _x7, _x8) {
