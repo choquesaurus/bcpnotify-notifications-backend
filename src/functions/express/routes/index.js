@@ -7,8 +7,8 @@ import firebaseAdmin from "firebase-admin";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import { validate_create_new_user, isVerified } from "../controllers/index";
-import { TemplateHTMLActiveLinkEmail } from "../../../datalayer/backing/sendgrid/index";
-import sgMail from "@sendgrid/mail";
+//import { TemplateHTMLActiveLinkEmail } from "../../../datalayer/backing/sendgrid/index";
+//import sgMail from "@sendgrid/mail";
 const routes = Router();
 
 routes.get("/", async (req, res) => {
@@ -157,7 +157,72 @@ routes.post("/transferdetails", async (req, res) => {
   res.send({ data: data_result.data() });
 });
 routes.post("/signup", validate_create_new_user);
+routes.post("/searchbynrocuenta", async (req, res) => {
+  let { nrocuenta } = req.body;
+  // const data_result = await database
+  //   .collection("users")
+  //   .where("details_user.nrocuenta", "==", nrocuenta)
+  //   //.limit(1)
+  //   .get();
 
+  //   if (!(data_result.docs[0] && "details_user" in data_result.docs[0].data())) {
+  //     //res.send({ message: "errore sadj" });
+  //     return res.redirect(process.env.failureRedirect);
+  //   }
+  // return res.send({ data: data_result.docs[0].data() });
+
+  // db.collection('comments').where("user","==",data_add.user).get().then(user_exists=>{
+  //   console.log(`Ya existe el usuario `,user_exists.docs[0].data().user)
+  // }).catch(async user_noexists=>{
+  //   const add_document = await db.collection('comments').add(data_add)
+  //   console.log("Se Agrero uno nuevo ",add_document.id)
+  // })
+  //console.log("RESULTADO ", result.docs[0].data());
+  try {
+    const request_result = await database
+      .collection("users")
+      .where("details_user.nrocuenta", "==", nrocuenta)
+      .limit(1)
+      .get();
+    if (
+      request_result.docs[0] &&
+      "details_user" in request_result.docs[0].data()
+    ) {
+      const { name, last_name } = request_result.docs[0].data().details_user;
+      return res.send({
+        found: true,
+        message: `Deseas transferir a ${name} ${last_name} con el numero de cuenta ${nrocuenta}`,
+      });
+    }
+    return res.send({
+      found: false,
+      message: `No existe el numero de cuenta ${nrocuenta}`,
+    });
+  } catch (error) {
+    return res.send({ found: false, message: error.message });
+  }
+
+  // if (!(result.docs[0] && "details_user" in result.docs[0].data())) {
+  // }
+  // database
+  //   .collection("users")
+  //   .where("details_user.nrocuenta", "==", nrocuenta)
+  //   .limit(1)
+  //   .get()
+  //   //.limit(1)
+  //   //.get()
+  //   //.limit()
+  //   .then((result) => {
+  //     return res.send({ data: result.docs[0].data() });
+  //   })
+  //   .catch((error) => {
+  //     //console.log(error.message);
+  //     return res.send({
+  //       error: error.message,
+  //       message: `No existe el numero de cuenta : ${nrocuenta}`,
+  //     });
+  //   });
+});
 routes.post("/transfer", async (req, res) => {
   const {
     depositoOrTranferencia = "",
@@ -202,13 +267,21 @@ routes.post("/transfer", async (req, res) => {
         await refAccountBcpReceptor.get()
       ).data().saldo;
       await refAccountBcpEmisor.update({
-        saldo: montoActualAccountEmisor - depositoOrTranferencia,
+        saldo: Number(
+          parseFloat(montoActualAccountEmisor - depositoOrTranferencia).toFixed(
+            2
+          )
+        ),
       });
       refEmisor
         .collection("outgoing_transfer")
         .add({
           saldo_antiguo: montoActualAccountEmisor,
-          saldo_nuevo: montoActualAccountEmisor - depositoOrTranferencia,
+          saldo_nuevo: Number(
+            parseFloat(
+              montoActualAccountEmisor - depositoOrTranferencia
+            ).toFixed(2)
+          ),
           monto_tranferido: depositoOrTranferencia,
           cuenta_receptora: cuentareceptora,
           hour_tranfer: new Date().toLocaleString(),
@@ -225,7 +298,11 @@ routes.post("/transfer", async (req, res) => {
         // })
         .then(async (results_bcpEmisor_outgoing_transfer) => {
           await refAccountBcpReceptor.update({
-            saldo: montoActualAccountReceptor + depositoOrTranferencia,
+            saldo: Number(
+              parseFloat(
+                montoActualAccountReceptor + depositoOrTranferencia
+              ).toFixed(2)
+            ),
           });
 
           /*
@@ -242,7 +319,11 @@ routes.post("/transfer", async (req, res) => {
             id: id_incoming_transfer_receptor,
           } = await refReceptor.collection("incoming_transfer").add({
             saldo_antiguo: montoActualAccountReceptor,
-            saldo_nuevo: montoActualAccountReceptor + depositoOrTranferencia,
+            saldo_nuevo: Number(
+              parseFloat(
+                montoActualAccountReceptor + depositoOrTranferencia
+              ).toFixed(2)
+            ),
             monto_tranferido: depositoOrTranferencia,
             cuenta_emisora: cuentaemisora,
             hour_tranfer: new Date().toLocaleString(),
@@ -278,12 +359,14 @@ routes.post("/transfer", async (req, res) => {
           // });
 
           return res.send({
+            status: true,
             message: "Transferencia correcta",
-            data: {
-              to_account_transfer: cuentareceptora,
-              id_incoming_transfer_receptor,
-              MessageNotificationReceptor,
-            },
+            to_account_transfer: cuentareceptora,
+            // data: {
+
+            //   //id_incoming_transfer_receptor,
+            //   // MessageNotificationReceptor,
+            // },
           });
         });
 
@@ -293,7 +376,7 @@ routes.post("/transfer", async (req, res) => {
       //     "Saldo actual en la cuenta del emisor " + montoActualAccountEmisor,
       // });
     })
-    .catch((error) => res.send({ message: error.message }));
+    .catch((error) => res.send({ status: false, message: error.message }));
   // if (!(query.docs[0] && "details_user" in query.docs[0].data())) {
   //   return res.send({ message: "No existe el numero de cuenta" });
   // }
