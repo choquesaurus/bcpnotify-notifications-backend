@@ -21,6 +21,7 @@ class Aplication {
     this.config();
     this.routes();
   }
+
   config() {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
@@ -45,6 +46,7 @@ class Aplication {
         keys: [process.env.keyCookie],
       })
     );
+
     this.app.use(passport.initialize());
     this.app.use(passport.session());
     this.app.use(
@@ -62,8 +64,8 @@ class Aplication {
     this.app.use("/", routes);
   }
   start() {
-    this.app.listen(process.env.PORT || 5020, () => {
-      console.log(`Run server in localhost:5015`);
+    this.app.listen(process.env.PORT || 5022, () => {
+      console.log(`Run server in localhost:5022`);
     });
   }
 }
