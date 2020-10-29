@@ -151,14 +151,34 @@ routes.post("/transferdetails", async (req, res) => {
   const data_result = await database
     .collection("users")
     .doc(idUsuarioActual)
-    .collection("incoming_transfer")
+    .collection("transfers")
+    //.collection("incoming_transfer")
     .doc(idtransferencia)
     .get();
-  res.send({ data: data_result.data() });
+  res.json(data_result.data());
 });
+// routes.post("/alltransfers", async (req, res) => {
+//   const { idUsuarioActual } = req.body;
+//   try {
+//     const listTotal = await database
+//       .collection("users")
+//       .doc(idUsuarioActual)
+//       .collection("transfers")
+//       .orderBy("timestamp", "desc")
+//       .get();
+
+//     const result_listTotal = listTotal.docs.map((data) =>
+//       Object.assign({ id: data.id }, data.data())
+//     );
+//     return res.json(result_listTotal);
+//   } catch (error) {
+//     return res.send({ message: error.message });
+//   }
+//   //return res.send({ messa: false });
+// });
 routes.post("/signup", validate_create_new_user);
 routes.post("/searchbynrocuenta", async (req, res) => {
-  let { nrocuenta } = req.body;
+  const { nrocuenta } = req.body;
   // const data_result = await database
   //   .collection("users")
   //   .where("details_user.nrocuenta", "==", nrocuenta)
@@ -273,8 +293,18 @@ routes.post("/transfer", async (req, res) => {
           )
         ),
       });
+      const {
+        details_user: { name, last_name },
+      } = await (await refReceptor.get()).data();
+
+      /*  CLOSE COLLECTION outgoing_transfer  */
       refEmisor
-        .collection("outgoing_transfer")
+        /* SE ELIMINA COLECCION OUTGOING_TRANSFER*/
+
+        //.collection("outgoing_transfer")
+
+        /* AHORA SE ALMACENARA EN LA COLECCIÓN TRANSFERS*/
+        .collection("transfers")
         .add({
           saldo_antiguo: montoActualAccountEmisor,
           saldo_nuevo: Number(
@@ -282,10 +312,19 @@ routes.post("/transfer", async (req, res) => {
               montoActualAccountEmisor - depositoOrTranferencia
             ).toFixed(2)
           ),
-          monto_tranferido: depositoOrTranferencia,
+
+          monto_transferido: depositoOrTranferencia,
           cuenta_receptora: cuentareceptora,
-          hour_tranfer: new Date().toLocaleString(),
+          //hour_transfer: new Date().toLocaleString("en-US"),
+          hour_transfer: new Date().toString(),
+          type: "outgoing_transfer",
+          timestamp: firebaseAdmin.firestore.FieldValue.serverTimestamp(),
+          details_user_transfer: {
+            name,
+            last_name,
+          },
         })
+
         // .update({
         //   outgoing_transfer: firebaseAdmin.firestore.FieldValue.arrayUnion({
         //     saldo_antiguo: montoActualAccountEmisor,
@@ -315,19 +354,30 @@ routes.post("/transfer", async (req, res) => {
             await refReceptor.get()
           ).data();
           // const {details_user:{name,address,nrocuenta},token:To_Token}=await (await refEmisor.get()).data();
+
+          /* SE ELIMINA COLECCION incoming_transfer*/
+
+          //.collection("incoming_transfer")
+
+          /* AHORA SE ALMACENARA EN LA COLECCIÓN TRANSFERS*/
+
           const {
             id: id_incoming_transfer_receptor,
-          } = await refReceptor.collection("incoming_transfer").add({
+            //} = await refReceptor.collection("transfers").add({
+          } = await refReceptor.collection("transfers").add({
             saldo_antiguo: montoActualAccountReceptor,
             saldo_nuevo: Number(
               parseFloat(
                 montoActualAccountReceptor + depositoOrTranferencia
               ).toFixed(2)
             ),
-            monto_tranferido: depositoOrTranferencia,
+            monto_transferido: depositoOrTranferencia,
             cuenta_emisora: cuentaemisora,
-            hour_tranfer: new Date().toLocaleString(),
-            details_user_emisor: {
+            //hour_transfer: new Date().toLocaleString("en-US"),
+            hour_transfer: new Date().toString(),
+            type: "incoming_transfer",
+            timestamp: firebaseAdmin.firestore.FieldValue.serverTimestamp(),
+            details_user_transfer: {
               name,
               last_name,
             },
