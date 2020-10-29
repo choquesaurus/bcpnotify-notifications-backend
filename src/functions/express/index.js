@@ -64,8 +64,8 @@ class Aplication {
     this.app.use("/", routes);
   }
   start() {
-    this.app.listen(process.env.PORT || 5020, () => {
-      console.log(`Run server in localhost:5020`);
+    this.app.listen(process.env.PORT || 5001, () => {
+      console.log(`Run server inn :)) localhost:5001`);
     });
   }
 }
