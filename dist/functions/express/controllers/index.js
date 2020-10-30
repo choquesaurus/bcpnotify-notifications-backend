@@ -261,13 +261,13 @@ var VerifyAccountEmailAddress = /*#__PURE__*/function () {
 
 var IngestUserToFirebaseUser = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(_ref4) {
-    var nrocuenta, _ref4$photoURL, photoURL, email, name, last_name, age, iduser, cryptoTokenValidateUser;
+    var nrocuenta, _ref4$photoURL, imagenperfil, email, name, last_name, age, iduser, cryptoTokenValidateUser;
 
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
-            nrocuenta = _ref4.nrocuenta, _ref4$photoURL = _ref4.photoURL, photoURL = _ref4$photoURL === void 0 ? "https://cdn3.f-cdn.com/contestentries/1269942/15600440/5a991c82be987_thumb900.jpg" : _ref4$photoURL, email = _ref4.email, name = _ref4.name, last_name = _ref4.last_name, age = _ref4.age, iduser = _ref4.iduser, cryptoTokenValidateUser = _ref4.cryptoTokenValidateUser;
+            nrocuenta = _ref4.nrocuenta, _ref4$photoURL = _ref4.photoURL, imagenperfil = _ref4$photoURL === void 0 ? "" : _ref4$photoURL, email = _ref4.email, name = _ref4.name, last_name = _ref4.last_name, age = _ref4.age, iduser = _ref4.iduser, cryptoTokenValidateUser = _ref4.cryptoTokenValidateUser;
             _context3.prev = 1;
             _context3.next = 4;
             return _index.database.collection("users").doc(iduser).set( //.add(
@@ -282,7 +282,7 @@ var IngestUserToFirebaseUser = /*#__PURE__*/function () {
               details_user: {
                 name: name,
                 last_name: last_name,
-                photoURL: photoURL,
+                photoURL: imagenperfil == "" ? "https://cdn3.f-cdn.com/contestentries/1269942/15600440/5a991c82be987_thumb900.jpg" : imagenperfil,
                 //displayName: user.displayName,
                 email: email,
                 nrocuenta: nrocuenta,

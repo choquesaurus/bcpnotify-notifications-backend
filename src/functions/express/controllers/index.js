@@ -153,7 +153,8 @@ const VerifyAccountEmailAddress = async (email, cryptoToken, urlbase) => {
 const IngestUserToFirebaseUser = async ({
   nrocuenta,
   // password, //bcrypt
-  photoURL = "https://cdn3.f-cdn.com/contestentries/1269942/15600440/5a991c82be987_thumb900.jpg",
+  //photoURL = "https://cdn3.f-cdn.com/contestentries/1269942/15600440/5a991c82be987_thumb900.jpg",
+  photoURL: imagenperfil = "",
   email,
   name,
   last_name,
@@ -179,7 +180,10 @@ const IngestUserToFirebaseUser = async ({
           details_user: {
             name,
             last_name,
-            photoURL,
+            photoURL:
+              imagenperfil == ""
+                ? "https://cdn3.f-cdn.com/contestentries/1269942/15600440/5a991c82be987_thumb900.jpg"
+                : imagenperfil,
             //displayName: user.displayName,
             email,
             nrocuenta,
