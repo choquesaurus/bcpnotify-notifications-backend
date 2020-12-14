@@ -1,6 +1,7 @@
 if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 }
+
 //import "@babel/polyfill";
 import express from "express";
 import cors from "cors";
@@ -12,7 +13,6 @@ import cookieParser from "cookie-parser";
 import cookieSession from "cookie-session";
 //import expressSession from "express-session";
 import passport from "passport";
-
 import sgMail from "@sendgrid/mail";
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 class Aplication {
